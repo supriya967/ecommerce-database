@@ -1,81 +1,114 @@
-E-Commerce Database Schema (MySQL)
-📄 Project Overview
+# 🛍️ E-Commerce Database Schema (MySQL)
 
-This task demonstrates basic SQL data manipulation operations performed on an ecommerce_db database.
-The goal is to practice adding, updating, and deleting records while maintaining clean and consistent data across multiple tables (customers, products, and orders).
+## 📋 Overview
 
-🎯 Objectives
+This project defines a **relational database schema** for an **E-Commerce System** using **MySQL**.  
+The database efficiently manages customers, products, orders, order items, and payments — ensuring smooth operations for any online shopping platform.
 
-Use INSERT INTO to add rows to tables.
+---
 
-Handle missing values using NULL or default values.
+## 👩‍💻 Author
 
-Apply UPDATE and DELETE with proper WHERE conditions.
+**Created by:** Supriya Priyadarsani Pati
 
-Ensure the database remains clean, consistent, and well-structured.
+---
 
-🧩 Database Used
+## 🗄️ Database Information
 
-Database Name: ecommerce_db
-Tables:
+- **Database Name:** `ecommerce_db`
+- **Database Type:** MySQL
+- **Purpose:** To handle the core functionalities of an e-commerce system — customer management, product catalog, orders, and payments.
 
-customers
+---
 
-products
+## 🧱 Tables Structure
 
-orders
+### 1. `customers`
 
-⚙️ Steps and SQL Commands
-1️⃣ Insert Data into Tables
+Stores information about users who register or place orders.
 
-Added customer and product records using the INSERT INTO command.
+| Column        | Type         | Description                       |
+| ------------- | ------------ | --------------------------------- |
+| `customer_id` | INT (PK)     | Unique customer ID                |
+| `name`        | VARCHAR(100) | Customer's full name              |
+| `email`       | VARCHAR(100) | Unique email ID                   |
+| `phone`       | VARCHAR(15)  | Contact number                    |
+| `address`     | VARCHAR(255) | Customer address                  |
+| `created_at`  | DATETIME     | Auto-stored date/time of creation |
 
-INSERT INTO customers (name, email, phone, address) VALUES
-('Manoj Kumar Pradhan', 'manoj.pradhan@gmail.com', '9876543210', 'Bhubaneswar, Odisha'),
-('Supriya Pati', 'supriya.pati@gmail.com', '9876543211', 'Berhampur, Odisha'),
-('Manas Mahanta', 'manas.mahanta@gmail.com', '9876543212', 'Keonjhar, Odisha'),
-('Ipsita Sahoo', NULL, '8923765230', 'Rourkela, Odisha');
+---
 
-2️⃣ Handle Missing Values
+### 2. `products`
 
-Used NULL for missing or unknown values.
+Contains details of all products available in the store.
 
-Used DEFAULT to auto-fill predefined values for certain columns.
+| Column        | Type          | Description                    |
+| ------------- | ------------- | ------------------------------ |
+| `product_id`  | INT (PK)      | Unique product ID              |
+| `name`        | VARCHAR(100)  | Product name                   |
+| `description` | TEXT          | Product details                |
+| `price`       | DECIMAL(10,2) | Product price                  |
+| `stock`       | INT           | Available quantity in stock    |
+| `created_at`  | DATETIME      | Auto-stored creation timestamp |
 
-INSERT INTO products (name, description, price, stock) VALUES
-('Wireless Mouse', 'Ergonomic mouse', 799.00, 50),
-('Laptop Bag', 'Waterproof bag', 1199.00, DEFAULT),
-('USB Keyboard', NULL, 599.00, 60);
+---
 
-3️⃣ Update Data
+### 3. `orders`
 
-Used UPDATE with WHERE to correct or modify data.
+Stores each order placed by customers.
 
-UPDATE customers
-SET address = 'Rourkela, Odisha'
-WHERE name = 'Ipsita Sahoo';
+| Column         | Type          | Description                         |
+| -------------- | ------------- | ----------------------------------- |
+| `order_id`     | INT (PK)      | Unique order ID                     |
+| `customer_id`  | INT (FK)      | References `customers(customer_id)` |
+| `order_date`   | DATETIME      | Date/time of order placement        |
+| `total_amount` | DECIMAL(10,2) | Total order amount                  |
 
-UPDATE products
-SET price = price \* 1.10
-WHERE price < 1000;
+---
 
-4️⃣ Delete Records
+### 4. `order_items`
 
-Used DELETE with WHERE to remove specific or unwanted entries.
+Handles the **many-to-many relationship** between `orders` and `products`.
 
-DELETE FROM customers
-WHERE name = 'Manas Mahanta';
+| Column          | Type          | Description                          |
+| --------------- | ------------- | ------------------------------------ |
+| `order_item_id` | INT (PK)      | Unique item ID                       |
+| `order_id`      | INT (FK)      | References `orders(order_id)`        |
+| `product_id`    | INT (FK)      | References `products(product_id)`    |
+| `quantity`      | INT           | Number of units ordered              |
+| `subtotal`      | DECIMAL(10,2) | Total for this product (price × qty) |
 
-DELETE FROM products
-WHERE stock = 0;
+---
 
-5️⃣ Final Verification
+### 5. `payments`
 
-Displayed final records to confirm updates and deletions:
+Tracks payment information for each order.
 
-SELECT _ FROM customers;
-SELECT _ FROM products;
-SELECT \* FROM orders;
+| Column           | Type          | Description                                                              |
+| ---------------- | ------------- | ------------------------------------------------------------------------ |
+| `payment_id`     | INT (PK)      | Unique payment ID                                                        |
+| `order_id`       | INT (FK)      | References `orders(order_id)`                                            |
+| `payment_date`   | DATETIME      | Date/time of payment                                                     |
+| `amount`         | DECIMAL(10,2) | Amount paid                                                              |
+| `payment_method` | ENUM          | Mode of payment (`Credit Card`, `Debit Card`, `UPI`, `Cash on Delivery`) |
+
+---
+
+## 🔗 Relationships
+
+- **One-to-Many:**
+  - A customer can have multiple orders.
+  - An order can have multiple order items.
+- **Many-to-Many (via `order_items`):**
+  - Products can belong to multiple orders and vice versa.
+- **One-to-One:**
+  - Each order has one corresponding payment.
+
+---
+
+name:supriya priyadarsani pati
+Tools used:mysql workbench,vscode,git/github;
+
 
 Name-Supriya Priyadarsani Pati
 Role-Sql Developer Intern
